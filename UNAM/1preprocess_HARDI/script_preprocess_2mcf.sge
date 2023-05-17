@@ -1,0 +1,45 @@
+#!/bin/bash
+# Use current working directory
+#$ -wd /mnt/MD1200B/egarza/vissa/preprocesamiento_HARDI/sub-001_t0/trial_2mcf
+#
+# Join stdout and stderr
+#$ -j y
+#
+# Run job through bash shell
+#$ -S /bin/bash
+#
+#You can edit the scriptsince this line
+#
+# Your job name
+#$ -N trial_2mcf
+#
+# Send an email after the job has finished
+#$ -m e
+#$ -M victorissa.93@gmail.com
+#
+# If modules are needed, source modules environment (Do not delete the next line):
+. /etc/profile.d/modules.sh
+#
+# Add any modules you might require:
+module load gcc/8.3.0
+module load fsl/6.0.3
+module load mrtrix3/3.0_RC3
+module load ants/2.3.4
+#
+# Write your commands in the next line
+mkdir 'fmap'
+fslroi '../dwi/sub-001_ses-t0_dwi.nii.gz' 'fmap/dwi2b0_7.nii.gz' 0 7
+mcflirt -in 'fmap/dwi2b0_7.nii.gz' -refvol 0
+mcflirt -in '../fmap/sub-001_ses-t0_run-02_epi.nii.gz' -out 'fmap/sub-001_ses-t0_run-02_epi_mcf.nii.gz' -refvol 0
+mrmath 'fmap/dwi2b0_7_mcf.nii.gz' mean 'fmap/mean_b0_AP.nii.gz' -axis 3
+mrmath 'fmap/sub-001_ses-t0_run-02_epi_mcf.nii.gz' mean 'fmap/mean_b0_PA.nii.gz' -axis 3
+mrcat 'fmap/mean_b0_AP.nii.gz' 'fmap/mean_b0_PA.nii.gz' 'fmap/b0_pair.nii.gz' -axis 3  
+
+mkdir 'dwi_preprocess'
+dwidenoise '../dwi/sub-001_ses-t0_dwi.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_den.nii.gz'
+mrdegibbs 'dwi_preprocess/sub-001_ses-t0_dwi_den.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_den_unr.nii.gz'
+
+dwipreproc 'dwi_preprocess/sub-001_ses-t0_dwi_den_unr.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_preproc.nii.gz' -rpe_pair -se_epi 'fmap/b0_pair.nii.gz' -pe_dir 'ap' -fslgrad '../dwi/sub-001_ses-t0_dwi.bvec' '../dwi/sub-001_ses-t0_dwi.bval' -export_grad_mrtrix 'DWIgradprep' -readout_time '0.04833' -eddy_options " --slm=linear"
+
+dwi2mask -fslgrad '../dwi/sub-001_ses-t0_dwi.bvec' '../dwi/sub-001_ses-t0_dwi.bval' 'dwi_preprocess/sub-001_ses-t0_dwi_preproc.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_preproc_mask.nii.gz'
+dwibiascorrect -ants -fslgrad '../dwi/sub-001_ses-t0_dwi.bvec' '../dwi/sub-001_ses-t0_dwi.bval' -mask 'dwi_preprocess/sub-001_ses-t0_dwi_preproc_mask.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_preproc.nii.gz' 'dwi_preprocess/sub-001_ses-t0_dwi_preproc_dbias.nii.gz'
