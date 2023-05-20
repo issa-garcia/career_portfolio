@@ -1,0 +1,3 @@
+fslmaths IIT_WM_atlas_256.nii.gz -thr 2662 -uthr 2662 IIT_WM_atlas_256_DLPFC2rvmPFC.nii.gz
+fslmaths IIT_WM_atlas_256_DLPFC2rvmPFC.nii.gz -bin IIT_WM_atlas_256_DLPFC2rvmPFC_mask.nii.gz
+fslmaths IIT_WM_atlas_256_DLPFC2rvmPFC_mask.nii.gz -Tmax IIT_WM_atlas_256_DLPFC2rvmPFC_mask3D.nii.gz
