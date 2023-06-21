@@ -1,1 +1,1 @@
-This repository is intended to be a portfolio of scripts I have written during my previous research projects.
+This repository is intended to be a portfolio of scripts I have written during my previous research projects. The final version is still in preparation.
