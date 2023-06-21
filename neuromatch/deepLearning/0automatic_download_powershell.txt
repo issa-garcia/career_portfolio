@@ -1,0 +1,14 @@
+git clone https://github.com/seermedical/seer-py.git
+cd .\seer-py\
+pip install .
+
+cd C:\Users\vissa\OneDrive
+python C:\Users\vissa\Documents\Universitaeten\TEC\Clínicas\2021\UNAM\Neuromatch\DeepLearning\neurovista_labels\seer-py\Examples\neurovista_contest_data_downloader.py
+
+while($min_val -lt 2370){$min_val = ((ls -n -file C:\Users\vissa\OneDrive\Pat1Train_download\Pat2Test) -split "_" | Select-String -Pattern 'Pat' -NotMatch | Select-String -Pattern '.mat' -NotMatch | ForEach-Object -Process {[int]$_.ToString()} | measure -max | Select-Object -expand Maximum); python C:\Users\vissa\Documents\Universitaeten\TEC\Clínicas\2021\UNAM\Neuromatch\DeepLearning\neurovista_labels\seer-py\Examples\neurovista_contest_data_downloader.py $min_val}
+
+while($min_val -lt 2370){$min_val = ((ls -n -file C:\Users\vissa\OneDrive\Pat1Train_download\Pat2Train) -split "_" | Select-String -Pattern 'Pat' -NotMatch | Select-String -Pattern '.mat' -NotMatch | ForEach-Object -Process {[int]$_.ToString()} | measure -max | Select-Object -expand Maximum); python C:\Users\vissa\Documents\Universitaeten\TEC\Clínicas\2021\UNAM\Neuromatch\DeepLearning\neurovista_labels\seer-py\Examples\neurovista_contest_data_downloader.py $min_val}
+
+while($min_val -lt 690){$min_val = ((ls -n -file C:\Users\vissa\OneDrive\Pat1Train_download\Pat3Test) -split "_" | Select-String -Pattern 'Pat' -NotMatch | Select-String -Pattern '.mat' -NotMatch | ForEach-Object -Process {[int]$_.ToString()} | measure -max | Select-Object -expand Maximum); python C:\Users\vissa\Documents\Universitaeten\TEC\Clínicas\2021\UNAM\Neuromatch\DeepLearning\neurovista_labels\seer-py\Examples\neurovista_contest_data_downloader.py $min_val}
+
+while($min_val -lt 2396){$min_val = ((ls -n -file C:\Users\vissa\OneDrive\Pat1Train_download\Pat3Train) -split "_" | Select-String -Pattern 'Pat' -NotMatch | Select-String -Pattern '.mat' -NotMatch | ForEach-Object -Process {[int]$_.ToString()} | measure -max | Select-Object -expand Maximum); python C:\Users\vissa\Documents\Universitaeten\TEC\Clínicas\2021\UNAM\Neuromatch\DeepLearning\neurovista_labels\seer-py\Examples\neurovista_contest_data_downloader.py $min_val}
